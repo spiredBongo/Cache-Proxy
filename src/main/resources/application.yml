@@ -1,0 +1,17 @@
+server:
+  port: 8080
+
+proxy:
+  upstream-base-url: https://httpbin.org
+  connect-timeout-ms: 3000
+  read-timeout-ms: 5000
+  forward-headers:
+    - Accept
+    - User-Agent
+    - Accept-Language
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
