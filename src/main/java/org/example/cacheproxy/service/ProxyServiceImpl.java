@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.example.cacheproxy.config.ProxyProperties;
 import org.example.cacheproxy.proxy.UpstreamClient;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +24,14 @@ public class ProxyServiceImpl implements ProxyService{
         this.upstreamClient = upstreamClient;
     }
 
-    public ResponseEntity<String> forwardGet(HttpServletRequest request){
+    public ResponseEntity<String> forwardAll(HttpServletRequest request, byte[] body){
         String upstreamUrl = buildUpstreamUrl(request);
         HttpHeaders headersToForward = buildForwardHeaders(request);
 
-        return upstreamClient.get(upstreamUrl, headersToForward);
+        HttpMethod method = HttpMethod.valueOf(request.getMethod());
+
+
+        return upstreamClient.forward(upstreamUrl, request, headersToForward, method, body);
     }
 
     public String buildUpstreamUrl(HttpServletRequest request){

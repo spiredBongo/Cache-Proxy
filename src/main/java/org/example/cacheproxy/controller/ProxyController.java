@@ -3,12 +3,12 @@ package org.example.cacheproxy.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.example.cacheproxy.service.ProxyServiceImpl;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/proxy")
 public class ProxyController {
     private final ProxyServiceImpl proxyService;
@@ -19,7 +19,21 @@ public class ProxyController {
     }
 
     @GetMapping("/**")
-    public ResponseEntity<String> proxyGet(HttpServletRequest request){
-        return proxyService.forwardGet(request);
+    public ResponseEntity<String> proxyGet(HttpServletRequest request, @RequestBody(required = false) byte[] body){
+        return proxyService.forwardAll(request, body);
+    }
+
+    @PostMapping("/**")
+    public ResponseEntity<String> proxyPost(HttpServletRequest request, @RequestBody byte[] body){
+        return proxyService.forwardAll(request, body);
+    }
+
+    @DeleteMapping("/**")
+    public ResponseEntity<String> proxyDelete(HttpServletRequest request, @RequestBody(required = false) byte[] body){
+        return proxyService.forwardAll(request, body);
+    }
+    @PutMapping("/**")
+    public ResponseEntity<String> proxyUpdate(HttpServletRequest request, @RequestBody byte[] body){
+        return proxyService.forwardAll(request, body);
     }
 }

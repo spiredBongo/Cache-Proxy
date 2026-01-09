@@ -1,5 +1,7 @@
 package org.example.cacheproxy.proxy;
 
+import jakarta.servlet.http.HttpServletRequest;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -15,14 +17,16 @@ public class UpstreamClient {
         this.restTemplate = restTemplate;
     }
 
-    public ResponseEntity<String> get(String url, HttpHeaders headers) {
-        HttpEntity<Void> entity = new HttpEntity<>(headers);
+    public ResponseEntity<String> forward(String url, HttpServletRequest request, HttpHeaders headers,HttpMethod method, byte[] body){
+
+        HttpEntity<byte[]> entity = new HttpEntity<>(body, headers);
 
         return restTemplate.exchange(
                 url,
-                HttpMethod.GET,
+                method,
                 entity,
                 String.class
         );
+
     }
 }
